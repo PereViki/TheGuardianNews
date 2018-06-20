@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!-- Date text color -->
+    <color name="colorTitle">#183251</color>
+
+    <!-- Date text color -->
+    <color name="colorDateText">#B7BCC2</color>
+
+    <!-- Section text color -->
+    <color name="colorSectionText">#FFFFFF</color>
+
+    <!-- Section text BG color -->
+    <color name="colorSectionBG">#303F9F</color>
+
+    <!-- Section text BG color -->
+    <color name="colorImageBG">#efefef</color>
+</resources>

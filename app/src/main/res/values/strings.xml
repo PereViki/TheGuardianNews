@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">The Guardian News</string>
+    <string name="empty_state">No articles found.</string>
+    <string name="no_connection">No internet connection.</string>
+
+    <string name="placeholder_title">Lorem Ipsum Dolor Sit Amet </string>
+    <string name="placeholder_section">Section</string>
+    <string name="placeholder_author">John Doe</string>
+    <string name="placeholder_date">2018.06.20</string>
+
+    <string name="by">by </string>
+    <string name="thumbnail">Article image</string>
+</resources>
