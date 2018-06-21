@@ -12,36 +12,43 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import android.app.LoaderManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ArticleActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<List<Article>>{
+        implements LoaderManager.LoaderCallbacks<List<Article>> {
 
-    /** Adapter for the list of articles */
-    private ArticleAdapter mAdapter;
-
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     public static final String LOG_TAG = ArticleActivity.class.getName();
-
-    /** URL to query the The Guardian dataset for article information */
+    /**
+     * URL to query the The Guardian dataset for article information
+     */
     private static final String GUARDIAN_REQUEST_URL =
             "https://content.guardianapis.com/search?section=business&page-size=30&show-tags=contributor&show-fields=thumbnail&api-key=2cf1ebde-d4a9-4aee-a687-2560d75ad8e1";
-
-    /** TextView that is displayed when the list is empty */
-    private TextView mEmptyStateTextView;
-
-    /** Progress bar */
-    ProgressBar mProgressBar;
-
     /**
      * Constant value for the article loader ID. We can choose any integer.
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int ARTICLE_LOADER_ID = 1;
+    /**
+     * Progress bar
+     */
+    ProgressBar mProgressBar;
+    /**
+     * Adapter for the list of articles
+     */
+    private ArticleAdapter mAdapter;
+    /**
+     * TextView that is displayed when the list is empty
+     */
+    private TextView mEmptyStateTextView;
 
     @Override
     public Loader<List<Article>> onCreateLoader(int i, Bundle bundle) {
@@ -71,6 +78,22 @@ public class ArticleActivity extends AppCompatActivity
         // data set. This will trigger the ListView to update.
         if (articles != null && !articles.isEmpty()) {
             mAdapter.addAll(articles);
+        } else {
+
+            // Get a reference to the ConnectivityManager to check state of network connectivity
+            ConnectivityManager connMgr = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            // Get details on the currently active default data network
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+            if (networkInfo != null && networkInfo.isConnected()) {
+                // Set empty state text to display "No articles found."
+                mEmptyStateTextView.setText(R.string.empty_state);
+            } else {
+                // Update empty state with no connection error message
+                mEmptyStateTextView.setText(R.string.no_connection);
+            }
         }
     }
 
