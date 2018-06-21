@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="settings_sections_labels">
+        <item>@string/settings_sections_all_label</item>
+        <item>@string/settings_sections_business_label</item>
+        <item>@string/settings_sections_football_label</item>
+    </string-array>
+
+    <string-array name="settings_sections_values">
+        <item>@string/settings_sections_all_value</item>
+        <item>@string/settings_sections_business_value</item>
+        <item>@string/settings_sections_football_value</item>
+    </string-array>
+</resources>

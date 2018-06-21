@@ -3,12 +3,16 @@ package com.example.android.theguardiannews;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -29,7 +33,7 @@ public class ArticleActivity extends AppCompatActivity
 
     /** URL to query the The Guardian dataset for article information */
     private static final String GUARDIAN_REQUEST_URL =
-            "https://content.guardianapis.com/search?section=business&page-size=30&show-tags=contributor&show-fields=thumbnail&api-key=2cf1ebde-d4a9-4aee-a687-2560d75ad8e1";
+            "https://content.guardianapis.com/search?api-key=2cf1ebde-d4a9-4aee-a687-2560d75ad8e1&show-tags=contributor&show-fields=thumbnail";
 
     /** TextView that is displayed when the list is empty */
     private TextView mEmptyStateTextView;
@@ -47,9 +51,34 @@ public class ArticleActivity extends AppCompatActivity
     public Loader<List<Article>> onCreateLoader(int i, Bundle bundle) {
         // Create a new loader for the given URL
 
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // getString retrieves a String value from the preferences. The second parameter is the default value for this preference.
+        String numArticles = sharedPrefs.getString(
+                getString(R.string.settings_num_articles_key),
+                getString(R.string.settings_num_articles_default));
+
+        String showSections = sharedPrefs.getString(
+                getString(R.string.settings_sections_key),
+                getString(R.string.settings_sections_default)
+        );
+
+        // parse breaks apart the URI string that's passed into its parameter
+        Uri baseUri = Uri.parse(GUARDIAN_REQUEST_URL);
+
+        // buildUpon prepares the baseUri that we just parsed so we can add query parameters to it
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        // Append query parameter and its value.
+        uriBuilder.appendQueryParameter("page-size", numArticles);
+        if(!showSections.equals("all")) {
+            uriBuilder.appendQueryParameter("section", showSections);
+        }
+
         Log.i(LOG_TAG, "TEST: onCreateLoader() method called");
 
-        return new ArticleLoader(this, GUARDIAN_REQUEST_URL);
+        // Return the completed uri
+        return new ArticleLoader(this, uriBuilder.toString());
     }
 
     @Override
@@ -71,6 +100,22 @@ public class ArticleActivity extends AppCompatActivity
         // data set. This will trigger the ListView to update.
         if (articles != null && !articles.isEmpty()) {
             mAdapter.addAll(articles);
+        } else {
+            // Get a reference to the ConnectivityManager to check state of network connectivity
+            ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            // Get details on the currently active default data network
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+
+            if (networkInfo != null && networkInfo.isConnected()) {
+                // Set empty state text to display "No articles found."
+                mEmptyStateTextView.setText(R.string.empty_state);
+            } else {
+                // Update empty state with no connection error message
+                mEmptyStateTextView.setText(R.string.no_connection);
+            }
+
         }
     }
 
@@ -151,6 +196,25 @@ public class ArticleActivity extends AppCompatActivity
             mEmptyStateTextView.setText(R.string.no_connection);
         }
 
+    }
+
+    @Override
+    // This method initialize the contents of the Activity's options menu.
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the Options Menu we specified in XML
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

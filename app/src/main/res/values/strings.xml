@@ -10,4 +10,28 @@
 
     <string name="by">by </string>
     <string name="thumbnail">Article image</string>
+
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">Articles Settings</string>
+
+    <string name="settings_num_articles_label">Number of articles to show</string>
+    <string name="settings_num_articles_key" translatable="false">num_articles</string>
+    <string name="settings_num_articles_default" translatable="false">10</string>
+
+    <!-- Strings For Section preferences [CHAR LIMIT=30] -->
+    <string name="settings_sections_label">Show Sections</string>
+    <string name="settings_sections_key" translatable="false">show_sections</string>
+    <string name="settings_sections_default" translatable="false">@string/settings_sections_all_value</string>
+
+    <!-- Label for settings ALL option [CHAR LIMIT=20] -->
+    <string name="settings_sections_all_label">ALL</string>
+    <string name="settings_sections_all_value" translatable="false">all</string>
+
+    <!-- Label for settings Business option [CHAR LIMIT=20] -->
+    <string name="settings_sections_business_label">Business</string>
+    <string name="settings_sections_business_value" translatable="false">business</string>
+
+    <!-- Label for settings Football option [CHAR LIMIT=20] -->
+    <string name="settings_sections_football_label">Football</string>
+    <string name="settings_sections_football_value" translatable="false">football</string>
 </resources>
